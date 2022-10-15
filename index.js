@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let persons = [
     {
         id: 1,
@@ -23,6 +25,16 @@ let persons = [
         number: "39-23-6423122"
     }
 ]
+
+const generateRandomId = (max) => {
+    let id = Math.round(Math.random() * max)
+    let person = persons.find(person => person.id === id)
+    if (person) {
+        generateRandomId(100)
+    } else {
+        return id
+    }
+}
 
 app.get('/api/persons',(request,response) => {
     response.json(persons)
@@ -54,6 +66,34 @@ app.delete('/api/persons/:id',(request, response) => {
     let id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
+})
+
+app.post('/api/persons',(request, response) => {
+    let body = request.body
+
+    if (!body.name || !body.number) {
+        return response.status(400).json({
+            error: 'The name and number are required'
+        })
+    }
+
+    let personMatch = persons.find(person => person.name === body.name)
+
+    if (personMatch) {
+        return response.status(406).json({
+            error: 'The name must be unique'
+        })        
+    }
+
+    let person = {
+        id: generateRandomId(100),
+        name: body.name,
+        number: body.number
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
 })
 
 const PORT = 3001
