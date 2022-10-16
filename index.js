@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 app.use(cors())
-app.use(express.static('build'))
+app.use(express.static(path.resolve(__dirname, './build')));
 app.use(express.json())
 
 let persons = [
@@ -105,6 +105,9 @@ app.post('/api/persons',(request, response) => {
     response.json(person)
 })
 
+app.get('*', (request, response)  => {
+    response.sendFile(path.resolve(__dirname, './build', 'index.html'));
+  });
 
 const PORT = process.env.PORT || 3001
 
