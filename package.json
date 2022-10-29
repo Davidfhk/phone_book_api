@@ -9,7 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../leccion_02/phone_book && npm run build --prod && cp -r build ../../leccion_03",
     "deploy": "git push",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
+    "lint": "eslint .",
+    "format": "eslint . --fix"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,10 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "standard": "^17.0.0"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json"
   }
 }
